@@ -3,11 +3,16 @@
 // Execute `rustlings hint enums2` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
-
 #[derive(Debug)]
 enum Message {
-    // TODO: define the different variants used below
+    // 定义 Move 变体，包含 x 和 y 字段
+    Move { x: i32, y: i32 },
+    // 定义 Echo 变体，包含一个字符串字段
+    Echo(String),
+    // 定义 ChangeColor 变体，包含三个整数字段
+    ChangeColor(u8, u8, u8),
+    // 定义 Quit 变体，它是一个无数据的单元变体
+    Quit,
 }
 
 impl Message {
