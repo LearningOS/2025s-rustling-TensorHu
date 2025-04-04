@@ -7,39 +7,27 @@
 // Execute `rustlings hint tests6` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
-
-struct Foo {
-    a: u128,
-    b: Option<String>,
-}
-
 /// # Safety
 ///
-/// The `ptr` must contain an owned box of `Foo`.
-unsafe fn raw_pointer_to_box(ptr: *mut Foo) -> Box<Foo> {
-    // SAFETY: The `ptr` contains an owned box of `Foo` by contract. We
-    // simply reconstruct the box from that pointer.
-    let mut ret: Box<Foo> = unsafe { ??? };
-    todo!("The rest of the code goes here")
+/// The `address` must contain a mutable reference to a valid `u32` value.
+unsafe fn modify_by_address(address: usize) {
+    // SAFETY: The address must point to a valid `u32` value that we can safely modify.
+    unsafe {
+        let ptr = address as *mut u32;
+        *ptr = 0xAABBCCDD;
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::time::Instant;
 
     #[test]
     fn test_success() {
-        let data = Box::new(Foo { a: 1, b: None });
-
-        let ptr_1 = &data.a as *const u128 as usize;
-        // SAFETY: We pass an owned box of `Foo`.
-        let ret = unsafe { raw_pointer_to_box(Box::into_raw(data)) };
-
-        let ptr_2 = &ret.a as *const u128 as usize;
-
-        assert!(ptr_1 == ptr_2);
-        assert!(ret.b == Some("hello".to_owned()));
+        let mut t: u32 = 0x12345678;
+        // SAFETY: The address is guaranteed to be valid and contains
+        // a unique reference to a `u32` local variable.
+        unsafe { modify_by_address(&mut t as *mut u32 as usize) };
+        assert!(t == 0xAABBCCDD);
     }
 }
